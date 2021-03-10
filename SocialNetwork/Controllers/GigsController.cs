@@ -1,4 +1,5 @@
-﻿using SocialNetwork.Models;
+﻿using Microsoft.AspNet.Identity;
+using SocialNetwork.Models;
 using SocialNetwork.ViewModels;
 using System.Linq;
 using System.Web.Mvc;
@@ -15,13 +16,43 @@ namespace SocialNetwork.Controllers
             _context = new ApplicationDbContext();
 
         }
+        [Authorize]
         public ActionResult Create()
         {
-            var viewmodel = new GigFormViewModel
+            var viewModel = new GigFormViewModel
             {
                 Genres = _context.Genres.ToList()
             };
-            return View(viewmodel);
+            return View(viewModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken ]
+        public ActionResult Create(GigFormViewModel viewModel)
+   
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Genres = _context.Genres.ToList();
+
+                return View("Create", viewModel);
+            }
+               
+            
+           
+            var gig = new Gig
+            {
+                ArtistId = User.Identity.GetUserId(),
+                DateTime = viewModel.GetDateTime(),
+                GenreId = viewModel.Genre,
+                venue = viewModel.venue
+            };
+
+            _context.Gigs.Add(gig);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
