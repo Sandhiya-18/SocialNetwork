@@ -14,6 +14,8 @@ namespace SocialNetwork.Models
 
         [Required]
         public string ArtistId { get; set; }
+
+        [Required]
         public DateTime DateTime { get; set; }
 
         [Required]

@@ -10,7 +10,7 @@ namespace SocialNetwork.ViewModels
         {
             DateTime dateTime;
            var isValid =  DateTime.TryParseExact(Convert.ToString(value),
-                      "d MM YYYY", 
+                      "d MMM yyyy", 
                       CultureInfo.CurrentCulture,
                       DateTimeStyles.None,
                       out dateTime);
